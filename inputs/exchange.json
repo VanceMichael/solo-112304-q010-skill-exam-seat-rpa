@@ -8,49 +8,125 @@
     "/school/a/schedule": {
       "status": 200,
       "kind": "html",
-      "body": "<main data-school=\"A\"><table><tr data-seat=\"S1\" data-person=\"P11\" data-start=\"3600\" data-duration=\"1200\" data-reset=\"180\"><td>数据清洗</td><td>普通</td></tr><tr data-seat=\"S2\" data-person=\"P12\" data-start=\"4800\" data-duration=\"1200\" data-extra=\"360\" data-reset=\"180\"><td>数据清洗</td><td>读屏 2.4</td></tr></table></main>"
+      "body": "<main data-school=\"A\"><table><tr data-seat=\"A1\" data-session=\"D1\" data-package=\"fx-001\"><td>数据清洗</td><td>09:00</td></tr><tr data-seat=\"A3\" data-session=\"D2\" data-package=\"fx-002\"><td>数据清洗</td><td>11:00</td></tr></table></main>"
     },
     "/school/b/schedule": {
       "status": 200,
       "kind": "html",
-      "body": "<main data-school=\"B\"><table><tr data-seat=\"S3\" data-person=\"P21\" data-start=\"3600\" data-duration=\"1200\" data-reset=\"180\"><td>数据清洗</td><td>普通</td></tr></table></main>"
+      "body": "<main data-school=\"B\"><table><tr data-seat=\"B1\" data-session=\"D1\" data-package=\"fx-013\"><td>数据清洗</td><td>09:00</td></tr><tr data-seat=\"B3\" data-session=\"D2\" data-package=\"fx-013\"><td>数据清洗</td><td>11:00</td></tr></table></main>"
     },
-    "/school/changes": {
+    "/school/packages": {
       "status": 200,
       "kind": "json",
       "body": {
-        "requests": []
+        "permissions": [
+          {
+            "school": "A",
+            "session": "D1",
+            "fingerprint": "fx-001"
+          },
+          {
+            "school": "A",
+            "session": "D2",
+            "fingerprint": "fx-002"
+          },
+          {
+            "school": "B",
+            "session": "D1",
+            "fingerprint": "fx-013"
+          },
+          {
+            "school": "B",
+            "session": "D2",
+            "fingerprint": "fx-013"
+          }
+        ]
+      }
+    },
+    "/school/submissions": {
+      "status": 200,
+      "kind": "json",
+      "body": {
+        "records": [
+          {
+            "school": "A",
+            "attempt": "AT-101",
+            "seat": "A1",
+            "session": "D1",
+            "disk": "G1",
+            "last": 2,
+            "archive": null
+          },
+          {
+            "school": "B",
+            "attempt": "AT-201",
+            "seat": "B1",
+            "session": "D1",
+            "disk": "K1",
+            "last": 1,
+            "archive": null
+          }
+        ]
       }
     },
     "/vendor/catalog": {
       "status": 200,
       "kind": "html",
-      "body": "<main><table><tr data-machine=\"H1\" data-config=\"M-A\" data-image=\"2026.12\" data-open=\"0,7000\" data-screen=\"2.4\"><td>通用环境</td></tr><tr data-machine=\"H1\" data-config=\"M-B\" data-image=\"2026.12\" data-open=\"0,7000\"><td>通用环境</td></tr><tr data-machine=\"H2\" data-config=\"M-C\" data-image=\"2026.12\" data-open=\"0,7100\" data-screen=\"2.3\"><td>通用环境</td></tr><tr data-machine=\"H3\" data-config=\"M-D\" data-image=\"2026.12\" data-open=\"0,7000\"><td>异地通用环境</td></tr></table></main>"
+      "body": "<main><table><tr data-machine=\"H1\" data-image=\"I8\" data-disk=\"G1\" data-until=\"10:45\"><td>标准实训</td></tr><tr data-machine=\"H2\" data-image=\"I8\" data-disk=\"K1\" data-until=\"10:45\"><td>标准实训</td></tr><tr data-machine=\"H3\" data-image=\"I8\" data-disk=\"E1\" data-until=\"12:30\"><td>备用实训</td></tr></table></main>"
+    },
+    "/vendor/artifacts": {
+      "status": 200,
+      "kind": "json",
+      "body": {
+        "records": [
+          {
+            "attempt": "AT-101",
+            "disk": "G1",
+            "sequence": 1,
+            "href": "/vendor/a1/result.csv",
+            "missing": []
+          },
+          {
+            "attempt": "AT-201",
+            "disk": "K1",
+            "sequence": 1,
+            "href": "/vendor/b1/result.csv",
+            "missing": []
+          }
+        ]
+      }
+    },
+    "/vendor/a1/result.csv": {
+      "status": 200,
+      "kind": "csv",
+      "body": "field,status\nprice,parsed\n"
+    },
+    "/vendor/b1/result.csv": {
+      "status": 200,
+      "kind": "csv",
+      "body": "field,status\namount,normalized\n"
     },
     "/vendor/current": {
       "status": 200,
       "kind": "json",
       "body": {
+        "now": "10:37",
         "claims": [
           {
-            "seat": "S1",
+            "seat": "A1",
             "slot": "V11",
-            "machine": "H3",
-            "state": "running",
-            "range": [
-              3600,
-              4980
-            ]
+            "machine": "H1",
+            "disk": "G1",
+            "state": "active",
+            "until": "10:45"
           },
           {
-            "seat": "S3",
+            "seat": "B1",
             "slot": "V13",
             "machine": "H2",
-            "state": "confirmed",
-            "range": [
-              3600,
-              4980
-            ]
+            "disk": "K1",
+            "state": "active",
+            "until": "10:45"
           }
         ]
       }
@@ -61,14 +137,14 @@
       "body": {
         "rows": [
           {
-            "seat": "S1",
+            "seat": "A1",
             "vendor": "V11",
-            "state": "confirmed"
+            "state": "issued"
           },
           {
-            "seat": "S3",
+            "seat": "B1",
             "vendor": "V13",
-            "state": "confirmed"
+            "state": "issued"
           }
         ]
       }
@@ -76,82 +152,110 @@
   },
   "changes": [
     {
-      "label": "便利考生换校，部分机器召回",
+      "label": "原盘续租与学校新建重考尝试",
       "routes": {
-        "/school/changes": {
-          "status": 200,
-          "kind": "json",
-          "body": {
-            "requests": [
-              {
-                "id": "C12",
-                "approved": true,
-                "person": "P12",
-                "prior": "S2",
-                "new": "S4",
-                "school": "B",
-                "window": [
-                  4800,
-                  6540
-                ],
-                "screen": "2.4",
-                "image": "2026.12"
-              }
-            ]
-          }
-        },
-        "/school/b/schedule": {
-          "status": 200,
-          "kind": "html",
-          "body": "<main data-school=\"B\"><table><tr data-seat=\"S3\" data-person=\"P21\" data-start=\"3600\" data-duration=\"1200\" data-reset=\"180\"><td>数据清洗</td></tr><tr data-seat=\"S4\" data-person=\"P12\" data-start=\"4800\" data-duration=\"1200\" data-extra=\"360\" data-reset=\"180\"><td>数据清洗</td><td>读屏 2.4</td></tr></table></main>"
-        },
-        "/vendor/recalled": {
+        "/school/submissions": {
           "status": 200,
           "kind": "json",
           "body": {
             "records": [
               {
-                "machine": "H2",
-                "from_": 4900,
-                "reason": "维护"
+                "school": "A",
+                "attempt": "AT-101",
+                "seat": "A1",
+                "session": "D1",
+                "disk": "G1",
+                "last": 2,
+                "archive": null
+              },
+              {
+                "school": "A",
+                "attempt": "AT-103",
+                "seat": "A3",
+                "session": "D2",
+                "disk": "E1",
+                "last": 1,
+                "retest_of": "AT-101",
+                "archive": null
+              },
+              {
+                "school": "B",
+                "attempt": "AT-201",
+                "seat": "B1",
+                "session": "D1",
+                "disk": "K1",
+                "last": 1,
+                "archive": {
+                  "state": "verified",
+                  "id": "AR-81"
+                }
               }
             ]
           }
+        },
+        "/vendor/artifacts": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "records": [
+              {
+                "attempt": "AT-101",
+                "disk": "G1",
+                "sequence": 1,
+                "href": "/vendor/a1/result.csv",
+                "missing": []
+              },
+              {
+                "attempt": "AT-103",
+                "disk": "E1",
+                "sequence": 1,
+                "href": "/vendor/a3/result.csv",
+                "missing": []
+              },
+              {
+                "attempt": "AT-201",
+                "disk": "K1",
+                "sequence": 1,
+                "href": "/vendor/b1/result.csv",
+                "missing": []
+              }
+            ]
+          }
+        },
+        "/vendor/a3/result.csv": {
+          "status": 200,
+          "kind": "csv",
+          "body": "field,status\nprice,retested\n"
         },
         "/vendor/current": {
           "status": 200,
           "kind": "json",
           "body": {
+            "now": "10:44",
             "claims": [
               {
-                "seat": "S1",
+                "seat": "A1",
                 "slot": "V11",
-                "machine": "H3",
-                "state": "running",
-                "range": [
-                  3600,
-                  4980
-                ]
-              },
-              {
-                "seat": "S2",
-                "slot": "V12",
                 "machine": "H1",
-                "state": "release_pending",
-                "range": [
-                  4800,
-                  6540
-                ]
+                "disk": "G1",
+                "state": "extended",
+                "until": "12:00"
               },
               {
-                "seat": "S3",
+                "seat": "B1",
                 "slot": "V13",
                 "machine": "H2",
+                "disk": "K1",
+                "state": "cleanup_pending",
+                "until": "10:45"
+              },
+              {
+                "seat": "A3",
+                "slot": "V14",
+                "machine": "H3",
+                "disk": "E1",
                 "state": "confirmed",
-                "range": [
-                  3600,
-                  4980
-                ]
+                "until": "12:30"
               }
             ]
           }
@@ -159,32 +263,61 @@
       }
     },
     {
-      "label": "旧场确认撤位，新工位回填结果还未对上",
+      "label": "读回不同盘世代与异步归档结果",
       "routes": {
         "/vendor/current": {
           "status": 200,
           "kind": "json",
           "body": {
+            "now": "10:52",
             "claims": [
               {
-                "seat": "S2",
-                "slot": "V12",
+                "seat": "A1",
+                "slot": "V11",
                 "machine": "H1",
-                "state": "released",
-                "range": [
-                  4800,
-                  6540
+                "disk": "G1",
+                "state": "extended",
+                "until": "12:00"
+              },
+              {
+                "seat": "B3",
+                "slot": "V15",
+                "machine": "H2",
+                "disk": "K2",
+                "state": "confirmed",
+                "until": "12:30"
+              },
+              {
+                "seat": "A3",
+                "slot": "V14",
+                "machine": "H3",
+                "disk": "E1",
+                "state": "confirmed",
+                "until": "12:30"
+              }
+            ]
+          }
+        },
+        "/vendor/artifacts": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "records": [
+              {
+                "attempt": "AT-101",
+                "disk": "G1",
+                "sequence": 1,
+                "href": "/vendor/a1/result.csv",
+                "missing": [
+                  2
                 ]
               },
               {
-                "seat": "S4",
-                "slot": "V14",
-                "machine": "H1",
-                "state": "confirmed",
-                "range": [
-                  4800,
-                  6540
-                ]
+                "attempt": "AT-103",
+                "disk": "E1",
+                "sequence": 1,
+                "href": "/vendor/a3/result.csv",
+                "missing": []
               }
             ]
           }
@@ -195,14 +328,61 @@
           "body": {
             "rows": [
               {
-                "seat": "S2",
-                "vendor": "V12",
-                "state": "cancelled"
+                "seat": "A1",
+                "vendor": "V11",
+                "state": "pending_archive"
               },
               {
-                "seat": "S4",
+                "seat": "B3",
                 "vendor": null,
                 "state": "pending"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "label": "考务接管缺片的原尝试",
+      "routes": {
+        "/school/submissions": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "records": [
+              {
+                "school": "A",
+                "attempt": "AT-101",
+                "seat": "A1",
+                "session": "D1",
+                "disk": "G1",
+                "last": 2,
+                "archive": {
+                  "state": "manual",
+                  "id": "MAN-81"
+                }
+              },
+              {
+                "school": "A",
+                "attempt": "AT-103",
+                "seat": "A3",
+                "session": "D2",
+                "disk": "E1",
+                "last": 1,
+                "retest_of": "AT-101",
+                "archive": null
+              },
+              {
+                "school": "B",
+                "attempt": "AT-201",
+                "seat": "B1",
+                "session": "D1",
+                "disk": "K1",
+                "last": 1,
+                "archive": {
+                  "state": "verified",
+                  "id": "AR-81"
+                }
               }
             ]
           }
@@ -214,17 +394,15 @@
     "/vendor/apply": {
       "operations": [
         "reserve",
-        "change",
+        "extend",
         "release"
       ],
       "identifier": "VM",
       "outcomes": {
         "1": {
-          "release": {
-            "S2": "pending"
-          },
-          "reserve": {
-            "S4": "rejected"
+          "extend": {
+            "A1": "accepted",
+            "B1": "refused"
           }
         }
       },
@@ -233,14 +411,15 @@
     "/school/confirm": {
       "operations": [
         "writeback",
-        "void"
+        "archive",
+        "refer"
       ],
       "identifier": "SC",
       "outcomes": {
         "2": {
           "writeback": {
-            "S4": "accepted",
-            "S3": "rejected",
+            "B3": "accepted",
+            "A3": "rejected",
             "@response": "lost"
           }
         }

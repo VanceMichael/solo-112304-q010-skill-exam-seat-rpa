@@ -8,9 +8,10 @@ class ExchangeInputs(unittest.TestCase):
         exchange = load()
         initial = exchange["initial"]
         changes = exchange["changes"]
-        catalog = initial["/vendor/catalog"]["body"]
-        self.assertEqual(catalog.count('data-machine="H1"'), 2)
-        chg = changes[0]["routes"]["/school/changes"]["body"]["requests"][0]
-        self.assertEqual(chg["prior"], "S2")
-        self.assertEqual(chg["new"], "S4")
-        self.assertEqual(changes[1]["routes"]["/school/current"]["body"]["rows"][-1]["vendor"], None)
+        old = initial["/school/submissions"]["body"]["records"][0]
+        new = changes[0]["routes"]["/school/submissions"]["body"]["records"][1]
+        self.assertEqual(old["attempt"], new["retest_of"])
+        self.assertNotEqual(old["disk"], new["disk"])
+        rows = changes[1]["routes"]["/vendor/artifacts"]["body"]["records"]
+        self.assertEqual(rows[0]["missing"], [2])
+        self.assertNotEqual(initial["/vendor/current"]["body"]["claims"][1]["disk"], changes[1]["routes"]["/vendor/current"]["body"]["claims"][1]["disk"])
