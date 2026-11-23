@@ -6,7 +6,7 @@
 
 ```sh
 python3 source_fixture.py --port 8765
-python3 -m unittest -v
+python3 -m unittest discover -s tests -v
 ```
 
 浏览器测试使用 Playwright 1.56.0 和随该版本安装的 Chromium。首次建立环境时运行 `python3 -m pip install -r requirements-browser.txt` 与 `python3 -m playwright install chromium`。
