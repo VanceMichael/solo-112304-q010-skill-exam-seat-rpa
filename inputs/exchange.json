@@ -1,0 +1,251 @@
+{
+  "initial": {
+    "/school/sessions": {
+      "status": 200,
+      "kind": "html",
+      "body": "<main><a href=\"/school/a/schedule\">学校 A</a><a href=\"/school/b/schedule\">学校 B</a></main>"
+    },
+    "/school/a/schedule": {
+      "status": 200,
+      "kind": "html",
+      "body": "<main data-school=\"A\"><table><tr data-seat=\"S1\" data-person=\"P11\" data-start=\"3600\" data-duration=\"1200\" data-reset=\"180\"><td>数据清洗</td><td>普通</td></tr><tr data-seat=\"S2\" data-person=\"P12\" data-start=\"4800\" data-duration=\"1200\" data-extra=\"360\" data-reset=\"180\"><td>数据清洗</td><td>读屏 2.4</td></tr></table></main>"
+    },
+    "/school/b/schedule": {
+      "status": 200,
+      "kind": "html",
+      "body": "<main data-school=\"B\"><table><tr data-seat=\"S3\" data-person=\"P21\" data-start=\"3600\" data-duration=\"1200\" data-reset=\"180\"><td>数据清洗</td><td>普通</td></tr></table></main>"
+    },
+    "/school/changes": {
+      "status": 200,
+      "kind": "json",
+      "body": {
+        "requests": []
+      }
+    },
+    "/vendor/catalog": {
+      "status": 200,
+      "kind": "html",
+      "body": "<main><table><tr data-machine=\"H1\" data-config=\"M-A\" data-image=\"2026.12\" data-open=\"0,7000\" data-screen=\"2.4\"><td>通用环境</td></tr><tr data-machine=\"H1\" data-config=\"M-B\" data-image=\"2026.12\" data-open=\"0,7000\"><td>通用环境</td></tr><tr data-machine=\"H2\" data-config=\"M-C\" data-image=\"2026.12\" data-open=\"0,7100\" data-screen=\"2.3\"><td>通用环境</td></tr><tr data-machine=\"H3\" data-config=\"M-D\" data-image=\"2026.12\" data-open=\"0,7000\"><td>异地通用环境</td></tr></table></main>"
+    },
+    "/vendor/current": {
+      "status": 200,
+      "kind": "json",
+      "body": {
+        "claims": [
+          {
+            "seat": "S1",
+            "slot": "V11",
+            "machine": "H3",
+            "state": "running",
+            "range": [
+              3600,
+              4980
+            ]
+          },
+          {
+            "seat": "S3",
+            "slot": "V13",
+            "machine": "H2",
+            "state": "confirmed",
+            "range": [
+              3600,
+              4980
+            ]
+          }
+        ]
+      }
+    },
+    "/school/current": {
+      "status": 200,
+      "kind": "json",
+      "body": {
+        "rows": [
+          {
+            "seat": "S1",
+            "vendor": "V11",
+            "state": "confirmed"
+          },
+          {
+            "seat": "S3",
+            "vendor": "V13",
+            "state": "confirmed"
+          }
+        ]
+      }
+    }
+  },
+  "changes": [
+    {
+      "label": "便利考生换校，部分机器召回",
+      "routes": {
+        "/school/changes": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "requests": [
+              {
+                "id": "C12",
+                "approved": true,
+                "person": "P12",
+                "prior": "S2",
+                "new": "S4",
+                "school": "B",
+                "window": [
+                  4800,
+                  6540
+                ],
+                "screen": "2.4",
+                "image": "2026.12"
+              }
+            ]
+          }
+        },
+        "/school/b/schedule": {
+          "status": 200,
+          "kind": "html",
+          "body": "<main data-school=\"B\"><table><tr data-seat=\"S3\" data-person=\"P21\" data-start=\"3600\" data-duration=\"1200\" data-reset=\"180\"><td>数据清洗</td></tr><tr data-seat=\"S4\" data-person=\"P12\" data-start=\"4800\" data-duration=\"1200\" data-extra=\"360\" data-reset=\"180\"><td>数据清洗</td><td>读屏 2.4</td></tr></table></main>"
+        },
+        "/vendor/recalled": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "records": [
+              {
+                "machine": "H2",
+                "from_": 4900,
+                "reason": "维护"
+              }
+            ]
+          }
+        },
+        "/vendor/current": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "claims": [
+              {
+                "seat": "S1",
+                "slot": "V11",
+                "machine": "H3",
+                "state": "running",
+                "range": [
+                  3600,
+                  4980
+                ]
+              },
+              {
+                "seat": "S2",
+                "slot": "V12",
+                "machine": "H1",
+                "state": "release_pending",
+                "range": [
+                  4800,
+                  6540
+                ]
+              },
+              {
+                "seat": "S3",
+                "slot": "V13",
+                "machine": "H2",
+                "state": "confirmed",
+                "range": [
+                  3600,
+                  4980
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "label": "旧场确认撤位，新工位回填结果还未对上",
+      "routes": {
+        "/vendor/current": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "claims": [
+              {
+                "seat": "S2",
+                "slot": "V12",
+                "machine": "H1",
+                "state": "released",
+                "range": [
+                  4800,
+                  6540
+                ]
+              },
+              {
+                "seat": "S4",
+                "slot": "V14",
+                "machine": "H1",
+                "state": "confirmed",
+                "range": [
+                  4800,
+                  6540
+                ]
+              }
+            ]
+          }
+        },
+        "/school/current": {
+          "status": 200,
+          "kind": "json",
+          "body": {
+            "rows": [
+              {
+                "seat": "S2",
+                "vendor": "V12",
+                "state": "cancelled"
+              },
+              {
+                "seat": "S4",
+                "vendor": null,
+                "state": "pending"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "forms": {
+    "/vendor/apply": {
+      "operations": [
+        "reserve",
+        "change",
+        "release"
+      ],
+      "identifier": "VM",
+      "outcomes": {
+        "1": {
+          "release": {
+            "S2": "pending"
+          },
+          "reserve": {
+            "S4": "rejected"
+          }
+        }
+      },
+      "browser": true
+    },
+    "/school/confirm": {
+      "operations": [
+        "writeback",
+        "void"
+      ],
+      "identifier": "SC",
+      "outcomes": {
+        "2": {
+          "writeback": {
+            "S4": "accepted",
+            "S3": "rejected",
+            "@response": "lost"
+          }
+        }
+      },
+      "browser": true
+    }
+  }
+}
